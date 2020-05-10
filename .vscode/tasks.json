@@ -1,0 +1,74 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/tests/NewClassLib.Tests/NewClassLib.Tests.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build release package",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "pack",
+                "-o:${workspaceFolder}/nuget",
+                "-c:Release",
+                "${workspaceFolder}/src/NewClassLib/NewClassLib.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/tests/NewClassLib.Tests/NewClassLib.Tests.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "/p:CollectCoverage=true",
+                "/p:CoverletOutputFormat=lcov",
+                "/p:CoverletOutput=${workspaceFolder}/coverage/lcov.info",
+                "${workspaceFolder}/tests/NewClassLib.Tests/NewClassLib.Tests.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "test"
+        },
+        {
+            "label": "test report",
+            "dependsOn": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "c:/users/<USERNAME>/.nuget/packages/reportgenerator/4.5.8/tools/netcoreapp3.0/ReportGenerator.dll",
+                "-reports:${workspaceFolder}/coverage/lcov.info",
+                "-targetdir:${workspaceFolder}/coverage/report"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "test"
+        }
+    ]
+}
